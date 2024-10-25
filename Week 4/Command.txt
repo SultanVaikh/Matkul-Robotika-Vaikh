@@ -1,0 +1,42 @@
+
+# Commands tugas Week 4 MoveIt
+
+## 1. Instalasi MoveIt
+sudo apt update
+sudo apt install ros-noetic-moveit
+source /opt/ros/noetic/setup.bash
+
+## 2. Setup Workspace dan Konfigurasi
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/
+catkin_make
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+## 3. Menjalankan RViz dengan Robot Panda
+sudo apt install ros-noetic-panda-moveit-config
+roslaunch panda_moveit_config demo.launch
+
+## 4. MoveIt Commander Scripting (Python)
+# Buka Python shell
+rosrun moveit_commander moveit_commander_cmdline.py
+
+# Contoh kontrol dengan MoveIt Commander
+group.set_named_target("ready")
+plan = group.go()
+
+# Jalur Cartesian
+waypoints = []
+wpose = group.get_current_pose().pose
+wpose.position.z -= 0.1  # Gerak ke bawah
+waypoints.append(copy.deepcopy(wpose))
+cartesian_plan, fraction = group.compute_cartesian_path(waypoints, 0.01, 0.0)
+group.execute(cartesian_plan, wait=True)
+
+## 5. Operasi Pick and Place
+# Menjalankan operasi pick and place
+rosrun my_pick_place pick_place_node.py
+
+## 6. Visualisasi di RViz
+# Jika ingin memulai kembali dengan konfigurasi RViz
+roslaunch panda_moveit_config demo.launch
