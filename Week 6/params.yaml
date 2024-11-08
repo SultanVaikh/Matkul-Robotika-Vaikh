@@ -1,0 +1,5 @@
+# params.yaml
+num_nodes: 100
+k_nearest: 5
+start_pos: [0.0, 0.0]
+goal_pos: [20.0, 20.0]
